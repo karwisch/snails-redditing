@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Readiness Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            height: 8px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            border-radius: 20px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 0.85rem;
+            color: #f39c12;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .question-helper {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(243, 156, 18, 0.5);
+        }
+
+        .option.selected {
+            background: rgba(243, 156, 18, 0.15);
+            border-color: #f39c12;
+        }
+
+        .option-indicator {
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .option.selected .option-indicator {
+            border-color: #f39c12;
+            background: #f39c12;
+        }
+
+        .option.selected .option-indicator::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #1a1a2e;
+            border-radius: 50%;
+        }
+
+        .option-text {
+            font-size: 1rem;
+        }
+
+        .slider-container {
+            margin-top: 20px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f39c12;
+        }
+
+        .slider-value span {
+            font-size: 1rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            color: #fff;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Page Styles */
+        .results-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .result-icon.ready {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .result-icon.almost {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .result-icon.foundation {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .result-description {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .score-breakdown {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .score-breakdown h3 {
+            font-size: 1rem;
+            color: #f39c12;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .score-label {
+            color: #ccc;
+        }
+
+        .score-value {
+            font-weight: 600;
+        }
+
+        .score-value.high { color: #2ecc71; }
+        .score-value.medium { color: #f39c12; }
+        .score-value.low { color: #e74c3c; }
+
+        .cta-section {
+            margin-top: 32px;
+        }
+
+        .cta-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .secondary-path {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .secondary-path p {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .secondary-link {
+            color: #f39c12;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .secondary-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Intro Card */
+        .intro-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .intro-card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .intro-card p {
+            color: #a0a0a0;
+            margin-bottom: 24px;
+            font-size: 1.05rem;
+        }
+
+        .intro-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .intro-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+
+        .intro-feature::before {
+            content: '✓';
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .question-card, .results-card, .intro-card {
+                padding: 24px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sales Readiness Assessment</h1>
+            <p class="subtitle">Discover your path to sustainable client growth</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="intro-card" id="introCard">
+            <h2>Find Your Fast Path to New Clients</h2>
+            <p>This quick assessment will help you understand where you are in your sales journey and what steps will get you results fastest.</p>
+            <div class="intro-features">
+                <div class="intro-feature">Takes 2-3 minutes</div>
+                <div class="intro-feature">Personalized results</div>
+                <div class="intro-feature">Clear next steps</div>
+                <div class="intro-feature">No fluff, just action</div>
+            </div>
+            <button class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
+        </div>
+
+        <!-- Question Cards -->
+        <div class="question-card" id="question-1">
+            <div class="question-number">Question 1 of 8</div>
+            <div class="question-text">How many connections do you have on LinkedIn?</div>
+            <div class="question-helper">Your existing network is often the fastest path to new clients.</div>
+            <div class="slider-container">
+                <div class="slider-labels">
+                    <span>0</span>
+                    <span>500+</span>
+                    <span>1000+</span>
+                </div>
+                <input type="range" class="slider" id="linkedinSlider" min="0" max="1500" value="250" oninput="updateSliderDisplay(this, 'linkedinValue')">
+                <div class="slider-value" id="linkedinValue">250 <span>connections</span></div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()">Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-2">
+            <div class="question-number">Question 2 of 8</div>
+            <div class="question-text">What's your current work situation?</div>
+            <div class="question-helper">This helps us understand your capacity for sales activities.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'workload', 'between')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Between projects - I have bandwidth to focus on sales</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workload', 'winding-down')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Current work is winding down - I need new clients soon</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workload', 'busy')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Pretty busy right now but want to build pipeline</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workload', 'overwhelmed')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Completely covered up - barely keeping up with current work</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-2" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-3">
+            <div class="question-number">Question 3 of 8</div>
+            <div class="question-text">How much time could you dedicate to sales activities?</div>
+            <div class="question-helper">Be honest - this shapes your realistic path forward.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'timeframe', '5-hours')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">About 5 hours total over the next few weeks</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'timeframe', '5-days')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">I can carve out 5 focused days over the next month</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'timeframe', '5-weeks')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">I'm ready to commit 5 weeks of consistent effort</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'timeframe', 'ongoing')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Sales is an ongoing priority - I make time regularly</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-3" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-4">
+            <div class="question-number">Question 4 of 8</div>
+            <div class="question-text">How do you currently get most of your work?</div>
+            <div class="question-helper">Understanding your current sources helps identify opportunities.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'workSource', 'referrals')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Mostly referrals from existing clients or network</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workSource', 'inbound')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Inbound from my content, website, or social media</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workSource', 'outreach')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Active outreach and networking</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workSource', 'random')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">It's pretty random - I don't have a consistent source</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-4" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-5">
+            <div class="question-number">Question 5 of 8</div>
+            <div class="question-text">Does the work you're getting match what you really want to be doing?</div>
+            <div class="question-helper">Alignment between your work and your goals matters for sustainable growth.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'workMatch', 'perfect')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Yes, I love the work I'm getting</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workMatch', 'mostly')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Mostly - about 70% is what I want</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workMatch', 'sometimes')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Sometimes - I take what comes my way</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'workMatch', 'rarely')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Rarely - I'm doing work just to pay the bills</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-5" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-6">
+            <div class="question-number">Question 6 of 8</div>
+            <div class="question-text">Do you often find yourself doing strategy work for free?</div>
+            <div class="question-helper">This is one of the most common patterns we see with consultants and service providers.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'freeStrategy', 'always')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Yes, constantly - I give away too much in proposals and calls</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'freeStrategy', 'often')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Pretty often - it's hard to know where to draw the line</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'freeStrategy', 'sometimes')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Sometimes - I'm working on getting better at this</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'freeStrategy', 'rarely')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Rarely - I'm good at protecting my expertise</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-6" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-7">
+            <div class="question-number">Question 7 of 8</div>
+            <div class="question-text">How do you feel about your current pricing?</div>
+            <div class="question-helper">Your pricing mindset often reflects deeper patterns in how you sell.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'pricing', 'confident')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Confident - I charge what I'm worth and clients pay it</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'pricing', 'underpriced')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">I know I'm underpriced but struggle to raise rates</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'pricing', 'inconsistent')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Inconsistent - my pricing is all over the place</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'pricing', 'unsure')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Honestly not sure if I'm priced right</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="btn-7" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="question-card" id="question-8">
+            <div class="question-number">Question 8 of 8</div>
+            <div class="question-text">When you think about "doing sales," what comes to mind?</div>
+            <div class="question-helper">Your beliefs about sales shape everything about how you approach it.</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'salesMindset', 'exciting')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">It's about connecting with people I can genuinely help</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'salesMindset', 'necessary')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">A necessary part of business - I can do it when I need to</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'salesMindset', 'uncomfortable')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">Uncomfortable - I'd rather the work just came to me</div>
+                </div>
+                <div class="option" onclick="selectOption(this, 'salesMindset', 'dread')">
+                    <div class="option-indicator"></div>
+                    <div class="option-text">I dread it - feels pushy and not like me</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="showResults()" id="btn-8" disabled>See My Results</button>
+            </div>
+        </div>
+
+        <!-- Results Cards -->
+        <div class="results-card" id="results-accelerator">
+            <div class="result-icon ready">🚀</div>
+            <div class="result-title">You're Ready to Accelerate</div>
+            <div class="result-description">
+                You have the network, the time, and the mindset to make real progress quickly.
+                Your LinkedIn network is a goldmine waiting to be tapped. With the right approach,
+                we can identify 10 potential clients from your existing connections and help you
+                close your first deals fast.
+            </div>
+            <div class="score-breakdown" id="breakdown-accelerator"></div>
+            <div class="cta-section">
+                <h3>Your Next Step</h3>
+                <a href="#" class="cta-button">Book Your Accelerator Call</a>
+            </div>
+        </div>
+
+        <div class="results-card" id="results-course">
+            <div class="result-icon almost">📚</div>
+            <div class="result-title">Let's Build Your Foundation First</div>
+            <div class="result-description">
+                You have good raw materials to work with, but there are a few things to address
+                before diving into an intensive program. The Fast Cash Course will help you
+                leverage your LinkedIn network to find quick wins while building the habits
+                and confidence for long-term success.
+            </div>
+            <div class="score-breakdown" id="breakdown-course"></div>
+            <div class="cta-section">
+                <h3>Your Next Step</h3>
+                <a href="#" class="cta-button">Get the Fast Cash Course</a>
+            </div>
+            <div class="secondary-path">
+                <p>After completing the course and landing some quick wins, you'll be ready for the full Accelerator program.</p>
+            </div>
+        </div>
+
+        <div class="results-card" id="results-mindset">
+            <div class="result-icon foundation">🧭</div>
+            <div class="result-title">Mindset Work First</div>
+            <div class="result-description">
+                Here's the honest truth: the tactical sales stuff won't stick until we address
+                what's underneath. You might be tired, overwhelmed, or carrying beliefs about
+                sales that are getting in your way. That's okay - and it's actually the most
+                important place to start. I recommend connecting with my colleague who
+                specializes in exactly this work.
+            </div>
+            <div class="score-breakdown" id="breakdown-mindset"></div>
+            <div class="cta-section">
+                <h3>Your Next Step</h3>
+                <a href="#" class="cta-button">Explore Readiness Coaching</a>
+            </div>
+            <div class="secondary-path">
+                <p>Once you've done this foundational work, the sales strategies will be much more effective.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentQuestion = 0;
+        const totalQuestions = 8;
+        const answers = {
+            linkedin: 250,
+            workload: null,
+            timeframe: null,
+            workSource: null,
+            workMatch: null,
+            freeStrategy: null,
+            pricing: null,
+            salesMindset: null
+        };
+
+        // Scoring weights
+        const scoring = {
+            linkedin: (val) => val >= 500 ? 3 : val >= 200 ? 2 : 1,
+            workload: { 'between': 3, 'winding-down': 3, 'busy': 2, 'overwhelmed': 0 },
+            timeframe: { '5-weeks': 3, 'ongoing': 3, '5-days': 2, '5-hours': 1 },
+            workSource: { 'referrals': 2, 'outreach': 3, 'inbound': 2, 'random': 1 },
+            workMatch: { 'perfect': 3, 'mostly': 2, 'sometimes': 1, 'rarely': 0 },
+            freeStrategy: { 'rarely': 3, 'sometimes': 2, 'often': 1, 'always': 0 },
+            pricing: { 'confident': 3, 'underpriced': 1, 'inconsistent': 1, 'unsure': 1 },
+            salesMindset: { 'exciting': 3, 'necessary': 2, 'uncomfortable': 1, 'dread': 0 }
+        };
+
+        function startAssessment() {
+            document.getElementById('introCard').style.display = 'none';
+            currentQuestion = 1;
+            showQuestion(1);
+            updateProgress();
+        }
+
+        function showQuestion(num) {
+            // Hide all questions
+            for (let i = 1; i <= totalQuestions; i++) {
+                const q = document.getElementById(`question-${i}`);
+                if (q) q.classList.remove('active');
+            }
+            // Show current question
+            const current = document.getElementById(`question-${num}`);
+            if (current) current.classList.add('active');
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateSliderDisplay(slider, displayId) {
+            const display = document.getElementById(displayId);
+            const value = parseInt(slider.value);
+            answers.linkedin = value;
+
+            if (value >= 1000) {
+                display.innerHTML = `${value}+ <span>connections</span>`;
+            } else {
+                display.innerHTML = `${value} <span>connections</span>`;
+            }
+        }
+
+        function selectOption(element, questionKey, value) {
+            // Remove selected class from siblings
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            // Add selected class to clicked option
+            element.classList.add('selected');
+
+            // Store answer
+            answers[questionKey] = value;
+
+            // Enable continue button
+            const btn = document.getElementById(`btn-${currentQuestion}`);
+            if (btn) btn.disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+                updateProgress();
+            }
+        }
+
+        function goBack() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+                updateProgress();
+            } else if (currentQuestion === 1) {
+                document.getElementById('introCard').style.display = 'block';
+                showQuestion(0);
+                currentQuestion = 0;
+                updateProgress();
+            }
+        }
+
+        function calculateScores() {
+            const scores = {
+                network: scoring.linkedin(answers.linkedin),
+                capacity: scoring.workload[answers.workload] || 0,
+                commitment: scoring.timeframe[answers.timeframe] || 0,
+                systems: scoring.workSource[answers.workSource] || 0,
+                alignment: scoring.workMatch[answers.workMatch] || 0,
+                boundaries: scoring.freeStrategy[answers.freeStrategy] || 0,
+                confidence: scoring.pricing[answers.pricing] || 0,
+                mindset: scoring.salesMindset[answers.salesMindset] || 0
+            };
+
+            const total = Object.values(scores).reduce((a, b) => a + b, 0);
+            const maxScore = 24; // 8 questions × 3 max points
+
+            return { scores, total, percentage: Math.round((total / maxScore) * 100) };
+        }
+
+        function getScoreClass(score) {
+            if (score >= 3) return 'high';
+            if (score >= 2) return 'medium';
+            return 'low';
+        }
+
+        function getScoreLabel(score) {
+            if (score >= 3) return 'Strong';
+            if (score >= 2) return 'Moderate';
+            if (score >= 1) return 'Developing';
+            return 'Needs Work';
+        }
+
+        function buildBreakdownHTML(scores) {
+            const labels = {
+                network: 'LinkedIn Network',
+                capacity: 'Current Capacity',
+                commitment: 'Time Commitment',
+                systems: 'Lead Sources',
+                alignment: 'Work Alignment',
+                boundaries: 'Protecting Expertise',
+                confidence: 'Pricing Confidence',
+                mindset: 'Sales Mindset'
+            };
+
+            let html = '<h3>Your Assessment Breakdown</h3>';
+            for (const [key, score] of Object.entries(scores)) {
+                html += `
+                    <div class="score-item">
+                        <span class="score-label">${labels[key]}</span>
+                        <span class="score-value ${getScoreClass(score)}">${getScoreLabel(score)}</span>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function showResults() {
+            // Hide all questions
+            for (let i = 1; i <= totalQuestions; i++) {
+                const q = document.getElementById(`question-${i}`);
+                if (q) q.classList.remove('active');
+            }
+
+            const { scores, total, percentage } = calculateScores();
+            const breakdownHTML = buildBreakdownHTML(scores);
+
+            // Determine which result to show
+            let resultId;
+
+            // Check for mindset blockers
+            const mindsetScore = scores.mindset + scores.confidence + scores.capacity;
+            if (mindsetScore <= 2 || scores.mindset === 0 || scores.capacity === 0) {
+                resultId = 'results-mindset';
+            }
+            // Check for accelerator readiness
+            else if (percentage >= 70 && scores.network >= 2 && scores.commitment >= 2) {
+                resultId = 'results-accelerator';
+            }
+            // Default to course path
+            else {
+                resultId = 'results-course';
+            }
+
+            // Populate breakdown and show result
+            const breakdownElement = document.getElementById(`breakdown-${resultId.split('-')[1]}`);
+            if (breakdownElement) {
+                breakdownElement.innerHTML = breakdownHTML;
+            }
+
+            document.getElementById(resultId).classList.add('active');
+
+            // Update progress to complete
+            document.getElementById('progressBar').style.width = '100%';
+        }
+    </script>
+</body>
+</html>
