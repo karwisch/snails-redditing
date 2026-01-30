@@ -566,20 +566,18 @@
 
         /* PDF Template (hidden, used for generation) */
         .pdf-template {
-            position: fixed;
-            left: 0;
-            top: 0;
+            display: none;
             width: 800px;
             background: #fff;
             padding: 48px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            z-index: -1;
-            opacity: 0;
-            pointer-events: none;
         }
 
         .pdf-template.rendering {
-            opacity: 1;
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
             z-index: 9999;
         }
 
@@ -1514,27 +1512,37 @@
             const element = document.getElementById('pdfTemplate');
             const clientName = clientInfo.name.replace(/\s+/g, '_');
 
-            // Make template visible for rendering
-            element.classList.add('rendering');
-
-            const opt = {
-                margin: 0.5,
-                filename: `Sales_Readiness_Report_${clientName}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
             // Show status
             showExportStatus('Generating your PDF...', 'sending');
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.classList.remove('rendering');
-                showExportStatus('PDF downloaded successfully!', 'success');
-            }).catch((err) => {
-                element.classList.remove('rendering');
-                console.error('PDF generation error:', err);
-                showExportStatus('Error generating PDF. Please try again.', 'error');
+            // Make template visible for rendering
+            element.classList.add('rendering');
+
+            // Wait for DOM to paint before capturing
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    const opt = {
+                        margin: 0.5,
+                        filename: `Sales_Readiness_Report_${clientName}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            logging: false,
+                            windowWidth: 800
+                        },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        element.classList.remove('rendering');
+                        showExportStatus('PDF downloaded successfully!', 'success');
+                    }).catch((err) => {
+                        element.classList.remove('rendering');
+                        console.error('PDF generation error:', err);
+                        showExportStatus('Error generating PDF. Please try again.', 'error');
+                    });
+                }, 100);
             });
         }
 
@@ -1560,10 +1568,20 @@
             // Make template visible for rendering
             element.classList.add('rendering');
 
+            // Wait for DOM to paint
+            await new Promise(resolve => {
+                requestAnimationFrame(() => setTimeout(resolve, 100));
+            });
+
             const opt = {
                 margin: 0.5,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: 800
+                },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
