@@ -573,14 +573,6 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .pdf-template.rendering {
-            display: block;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 9999;
-        }
-
         .pdf-header {
             text-align: center;
             margin-bottom: 40px;
@@ -1179,9 +1171,6 @@
         </div>
     </div>
 
-    <!-- html2pdf.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <script>
         // State management
         let currentQuestion = 0;
@@ -1509,41 +1498,341 @@
         function downloadPDF() {
             preparePDFTemplate();
 
-            const element = document.getElementById('pdfTemplate');
             const clientName = clientInfo.name.replace(/\s+/g, '_');
+            showExportStatus('Opening your report...', 'sending');
 
-            // Show status
-            showExportStatus('Generating your PDF...', 'sending');
+            // Open a new window with the PDF content
+            const printWindow = window.open('', '_blank', 'width=850,height=1100');
 
-            // Make template visible for rendering
-            element.classList.add('rendering');
+            if (!printWindow) {
+                showExportStatus('Please allow popups to view your report.', 'error');
+                return;
+            }
 
-            // Wait for DOM to paint before capturing
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    const opt = {
-                        margin: 0.5,
-                        filename: `Sales_Readiness_Report_${clientName}.pdf`,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: {
-                            scale: 2,
-                            useCORS: true,
-                            logging: false,
-                            windowWidth: 800
-                        },
-                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                    };
+            // Build the complete HTML for the new window
+            const printContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Readiness Report - ${clientInfo.name}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        element.classList.remove('rendering');
-                        showExportStatus('PDF downloaded successfully!', 'success');
-                    }).catch((err) => {
-                        element.classList.remove('rendering');
-                        console.error('PDF generation error:', err);
-                        showExportStatus('Error generating PDF. Please try again.', 'error');
-                    });
-                }, 100);
-            });
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        .action-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #A81D4A, #8a1840);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+
+        .action-bar h1 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-print {
+            background: #fff;
+            color: #A81D4A;
+        }
+
+        .btn-print:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+
+        .btn-close {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .pdf-container {
+            max-width: 800px;
+            margin: 80px auto 40px;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .pdf-content {
+            padding: 48px;
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #5f9cae;
+        }
+
+        .pdf-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #A81D4A;
+            margin-bottom: 8px;
+        }
+
+        .pdf-title {
+            font-size: 1.4rem;
+            color: #5f9cae;
+            margin-bottom: 4px;
+        }
+
+        .pdf-date {
+            font-size: 0.9rem;
+            color: #636e72;
+        }
+
+        .pdf-client-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .pdf-client-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 4px;
+        }
+
+        .pdf-client-email {
+            color: #636e72;
+        }
+
+        .pdf-result-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .pdf-result-badge.accelerator {
+            background: rgba(168, 29, 74, 0.1);
+            color: #A81D4A;
+        }
+
+        .pdf-result-badge.course {
+            background: rgba(95, 156, 174, 0.15);
+            color: #4a8799;
+        }
+
+        .pdf-result-badge.mindset {
+            background: rgba(95, 156, 174, 0.15);
+            color: #4a8799;
+        }
+
+        .pdf-recommendation {
+            background: linear-gradient(135deg, rgba(168, 29, 74, 0.05), rgba(95, 156, 174, 0.05));
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            border-left: 4px solid #A81D4A;
+        }
+
+        .pdf-recommendation h3 {
+            font-size: 1.2rem;
+            color: #A81D4A;
+            margin-bottom: 12px;
+        }
+
+        .pdf-recommendation p {
+            color: #2d3436;
+            line-height: 1.7;
+        }
+
+        .pdf-scores {
+            margin-bottom: 32px;
+        }
+
+        .pdf-scores h3 {
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .pdf-score-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pdf-score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .pdf-score-label {
+            color: #2d3436;
+        }
+
+        .pdf-score-value {
+            font-weight: 600;
+        }
+
+        .pdf-score-value.high { color: #27ae60; }
+        .pdf-score-value.medium { color: #5f9cae; }
+        .pdf-score-value.low { color: #A81D4A; }
+
+        .pdf-next-steps {
+            background: #f8f9fa;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .pdf-next-steps h3 {
+            font-size: 1.1rem;
+            color: #A81D4A;
+            margin-bottom: 16px;
+        }
+
+        .pdf-next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pdf-next-steps li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #2d3436;
+        }
+
+        .pdf-next-steps li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #5f9cae;
+            font-weight: bold;
+        }
+
+        .pdf-footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 2px solid #e9ecef;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .pdf-footer strong {
+            color: #A81D4A;
+        }
+
+        .badge-container {
+            text-align: center;
+        }
+
+        /* Print styles */
+        @media print {
+            .action-bar {
+                display: none !important;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            .pdf-container {
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .pdf-content {
+                padding: 40px;
+            }
+
+            @page {
+                size: letter;
+                margin: 0.5in;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="action-bar">
+        <h1>Your Sales Readiness Report</h1>
+        <div class="action-buttons">
+            <button class="action-btn btn-print" onclick="window.print()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                Print / Save as PDF
+            </button>
+            <button class="action-btn btn-close" onclick="window.close()">Close</button>
+        </div>
+    </div>
+
+    <div class="pdf-container">
+        <div class="pdf-content">
+            ${document.getElementById('pdfTemplate').innerHTML}
+        </div>
+    </div>
+
+    <script>
+        // Auto-focus the window
+        window.focus();
+    </script>
+</body>
+</html>`;
+
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+
+            showExportStatus('Report opened in new window. Use "Print / Save as PDF" to download.', 'success');
         }
 
         async function sendResults() {
@@ -1562,74 +1851,33 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Generate PDF blob for email attachment
-            const element = document.getElementById('pdfTemplate');
+            // INTEGRATION POINT: Send to your backend/webhook
+            // This endpoint should:
+            // 1. Email results to client (clientInfo.email)
+            // 2. Email results to Sherra
+            // 3. Append data to Google Sheet/Doc
 
-            // Make template visible for rendering
-            element.classList.add('rendering');
+            // Example: Send to webhook (replace with actual endpoint)
+            // try {
+            //     await fetch('YOUR_WEBHOOK_URL', {
+            //         method: 'POST',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify(resultsData)
+            //     });
+            // } catch (error) {
+            //     console.error('Error sending results:', error);
+            // }
 
-            // Wait for DOM to paint
-            await new Promise(resolve => {
-                requestAnimationFrame(() => setTimeout(resolve, 100));
-            });
+            // For now, log to console and show success
+            console.log('Results data ready for submission:', resultsData);
 
-            const opt = {
-                margin: 0.5,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    windowWidth: 800
-                },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+            showExportStatus(
+                `Results sent to ${clientInfo.email}! Check your inbox.`,
+                'success'
+            );
 
-            try {
-                const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
-                element.classList.remove('rendering');
-
-                // Convert blob to base64 for transmission
-                const reader = new FileReader();
-                reader.readAsDataURL(pdfBlob);
-                reader.onloadend = async function() {
-                    const base64PDF = reader.result.split(',')[1];
-
-                    // INTEGRATION POINT: Send to your backend/webhook
-                    // This endpoint should:
-                    // 1. Email PDF to client (clientInfo.email)
-                    // 2. Email PDF to Sherra
-                    // 3. Append data to Google Sheet/Doc
-
-                    const webhookPayload = {
-                        ...resultsData,
-                        pdfBase64: base64PDF
-                    };
-
-                    // Example: Send to webhook (replace with actual endpoint)
-                    // await fetch('YOUR_WEBHOOK_URL', {
-                    //     method: 'POST',
-                    //     headers: { 'Content-Type': 'application/json' },
-                    //     body: JSON.stringify(webhookPayload)
-                    // });
-
-                    // For now, log to console and show success
-                    console.log('Results data ready for submission:', resultsData);
-                    console.log('PDF generated and ready for email');
-
-                    showExportStatus(
-                        `Results sent to ${clientInfo.email}! Check your inbox.`,
-                        'success'
-                    );
-
-                    // Also save to localStorage as backup
-                    saveToLocalStorage(resultsData);
-                };
-            } catch (error) {
-                document.getElementById('pdfTemplate').classList.remove('rendering');
-                console.error('Error generating PDF:', error);
-                showExportStatus('There was an error. Please try downloading instead.', 'error');
-            }
+            // Also save to localStorage as backup
+            saveToLocalStorage(resultsData);
         }
 
         function showExportStatus(message, type) {
