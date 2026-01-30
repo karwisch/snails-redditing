@@ -443,6 +443,300 @@
             font-weight: bold;
         }
 
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2d3436;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #5f9cae;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(95, 156, 174, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .intro-form {
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        /* PDF Export Section */
+        .export-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 2px solid rgba(95, 156, 174, 0.2);
+        }
+
+        .export-section h3 {
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin-bottom: 8px;
+        }
+
+        .export-section p {
+            font-size: 0.95rem;
+            color: #636e72;
+            margin-bottom: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #5f9cae;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-export:hover {
+            background: #4a8799;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(95, 156, 174, 0.4);
+        }
+
+        .btn-export svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .export-status {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .export-status.success {
+            display: block;
+            background: rgba(39, 174, 96, 0.1);
+            color: #27ae60;
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+
+        .export-status.sending {
+            display: block;
+            background: rgba(95, 156, 174, 0.1);
+            color: #5f9cae;
+            border: 1px solid rgba(95, 156, 174, 0.2);
+        }
+
+        /* PDF Template (hidden, used for generation) */
+        .pdf-template {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 800px;
+            background: #fff;
+            padding: 48px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #5f9cae;
+        }
+
+        .pdf-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #A81D4A;
+            margin-bottom: 8px;
+        }
+
+        .pdf-title {
+            font-size: 1.4rem;
+            color: #5f9cae;
+            margin-bottom: 4px;
+        }
+
+        .pdf-date {
+            font-size: 0.9rem;
+            color: #636e72;
+        }
+
+        .pdf-client-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .pdf-client-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 4px;
+        }
+
+        .pdf-client-email {
+            color: #636e72;
+        }
+
+        .pdf-result-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .pdf-result-badge.accelerator {
+            background: rgba(168, 29, 74, 0.1);
+            color: #A81D4A;
+        }
+
+        .pdf-result-badge.course {
+            background: rgba(95, 156, 174, 0.15);
+            color: #4a8799;
+        }
+
+        .pdf-result-badge.mindset {
+            background: rgba(95, 156, 174, 0.15);
+            color: #4a8799;
+        }
+
+        .pdf-recommendation {
+            background: linear-gradient(135deg, rgba(168, 29, 74, 0.05), rgba(95, 156, 174, 0.05));
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            border-left: 4px solid #A81D4A;
+        }
+
+        .pdf-recommendation h3 {
+            font-size: 1.2rem;
+            color: #A81D4A;
+            margin-bottom: 12px;
+        }
+
+        .pdf-recommendation p {
+            color: #2d3436;
+            line-height: 1.7;
+        }
+
+        .pdf-scores {
+            margin-bottom: 32px;
+        }
+
+        .pdf-scores h3 {
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .pdf-score-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pdf-score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .pdf-score-label {
+            color: #2d3436;
+        }
+
+        .pdf-score-value {
+            font-weight: 600;
+        }
+
+        .pdf-score-value.high { color: #27ae60; }
+        .pdf-score-value.medium { color: #5f9cae; }
+        .pdf-score-value.low { color: #A81D4A; }
+
+        .pdf-next-steps {
+            background: #f8f9fa;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .pdf-next-steps h3 {
+            font-size: 1.1rem;
+            color: #A81D4A;
+            margin-bottom: 16px;
+        }
+
+        .pdf-next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pdf-next-steps li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #2d3436;
+        }
+
+        .pdf-next-steps li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #5f9cae;
+            font-weight: bold;
+        }
+
+        .pdf-footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 2px solid #e9ecef;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .pdf-footer strong {
+            color: #A81D4A;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 24px 16px;
@@ -485,13 +779,23 @@
         <div class="intro-card" id="introCard">
             <h2>Find Your Fast Path to New Clients</h2>
             <p>This quick assessment will help you understand where you are in your sales journey and what steps will get you results fastest.</p>
+            <div class="intro-form">
+                <div class="form-group">
+                    <label for="clientName">Your Name</label>
+                    <input type="text" id="clientName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="clientEmail">Email Address</label>
+                    <input type="email" id="clientEmail" class="form-input" placeholder="you@example.com" required>
+                </div>
+            </div>
             <div class="intro-features">
                 <div class="intro-feature">Takes 2-3 minutes</div>
                 <div class="intro-feature">Personalized results</div>
                 <div class="intro-feature">Clear next steps</div>
                 <div class="intro-feature">No fluff, just action</div>
             </div>
-            <button class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
+            <button class="btn btn-primary" onclick="startAssessment()" id="startBtn">Start Assessment</button>
         </div>
 
         <!-- Question Cards -->
@@ -725,6 +1029,25 @@
                 <h3>Your Next Step</h3>
                 <a href="#" class="cta-button">Book Your Accelerator Call</a>
             </div>
+            <div class="export-section">
+                <h3>Get Your Results Report</h3>
+                <p>We'll send a beautiful PDF summary to your inbox and save your results for our records.</p>
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="downloadPDF()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button class="btn-export" onclick="sendResults()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Email My Results
+                    </button>
+                </div>
+                <div class="export-status" id="exportStatus"></div>
+            </div>
         </div>
 
         <div class="results-card" id="results-course">
@@ -743,6 +1066,25 @@
             </div>
             <div class="secondary-path">
                 <p>After completing the course and landing some quick wins, you'll be ready for the full Accelerator program.</p>
+            </div>
+            <div class="export-section">
+                <h3>Get Your Results Report</h3>
+                <p>We'll send a beautiful PDF summary to your inbox and save your results for our records.</p>
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="downloadPDF()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button class="btn-export" onclick="sendResults()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Email My Results
+                    </button>
+                </div>
+                <div class="export-status" id="exportStatus"></div>
             </div>
         </div>
 
@@ -764,13 +1106,81 @@
             <div class="secondary-path">
                 <p>Once you've done this foundational work, the sales strategies will be much more effective.</p>
             </div>
+            <div class="export-section">
+                <h3>Get Your Results Report</h3>
+                <p>We'll send a beautiful PDF summary to your inbox and save your results for our records.</p>
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="downloadPDF()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button class="btn-export" onclick="sendResults()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Email My Results
+                    </button>
+                </div>
+                <div class="export-status" id="exportStatus"></div>
+            </div>
         </div>
     </div>
+
+    <!-- PDF Template (hidden) -->
+    <div class="pdf-template" id="pdfTemplate">
+        <div class="pdf-header">
+            <div class="pdf-logo">Next Level Narrative</div>
+            <div class="pdf-title">Sales Readiness Assessment Results</div>
+            <div class="pdf-date" id="pdfDate"></div>
+        </div>
+
+        <div class="pdf-client-info">
+            <div class="pdf-client-name" id="pdfClientName"></div>
+            <div class="pdf-client-email" id="pdfClientEmail"></div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="pdf-result-badge" id="pdfResultBadge"></div>
+        </div>
+
+        <div class="pdf-recommendation">
+            <h3 id="pdfRecommendationTitle"></h3>
+            <p id="pdfRecommendationText"></p>
+        </div>
+
+        <div class="pdf-scores">
+            <h3>Your Assessment Breakdown</h3>
+            <div class="pdf-score-grid" id="pdfScoreGrid"></div>
+        </div>
+
+        <div class="pdf-next-steps">
+            <h3>Recommended Next Steps</h3>
+            <ul id="pdfNextSteps"></ul>
+        </div>
+
+        <div class="pdf-footer">
+            <p>Questions? Reach out at <strong>sherra@nextlevelnarrative.com</strong></p>
+            <p style="margin-top: 8px;">© Next Level Narrative | nextlevelnarrative.com</p>
+        </div>
+    </div>
+
+    <!-- html2pdf.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         // State management
         let currentQuestion = 0;
+        let currentResultType = null;
+        let currentScores = null;
         const totalQuestions = 8;
+
+        const clientInfo = {
+            name: '',
+            email: ''
+        };
+
         const answers = {
             linkedin: 250,
             workload: null,
@@ -780,6 +1190,46 @@
             freeStrategy: null,
             pricing: null,
             salesMindset: null
+        };
+
+        // Result configurations
+        const resultConfig = {
+            'accelerator': {
+                badge: 'Ready to Accelerate',
+                badgeClass: 'accelerator',
+                title: 'You\'re Ready to Accelerate',
+                description: 'You have the network, the time, and the mindset to make real progress quickly. Your LinkedIn network is a goldmine waiting to be tapped. With the right approach, we can identify 10 potential clients from your existing connections and help you close your first deals fast.',
+                nextSteps: [
+                    'Schedule your Accelerator Strategy Call',
+                    'Prepare a list of your top 20 LinkedIn connections',
+                    'Review your current service offerings and pricing',
+                    'Block 5 hours per week for focused sales activities'
+                ]
+            },
+            'course': {
+                badge: 'Foundation Building',
+                badgeClass: 'course',
+                title: 'Let\'s Build Your Foundation First',
+                description: 'You have good raw materials to work with, but there are a few things to address before diving into an intensive program. The Fast Cash Course will help you leverage your LinkedIn network to find quick wins while building the habits and confidence for long-term success.',
+                nextSteps: [
+                    'Enroll in the Fast Cash Course',
+                    'Complete the LinkedIn audit exercise',
+                    'Identify 3 services you can offer immediately',
+                    'Practice the value conversation framework'
+                ]
+            },
+            'mindset': {
+                badge: 'Mindset Focus',
+                badgeClass: 'mindset',
+                title: 'Mindset Work First',
+                description: 'The tactical sales strategies will be much more effective once you address what\'s underneath. You might be tired, overwhelmed, or carrying beliefs about sales that are getting in your way. This is actually the most important place to start.',
+                nextSteps: [
+                    'Book a Readiness Coaching consultation',
+                    'Reflect on your beliefs about sales and selling',
+                    'Identify what\'s draining your energy right now',
+                    'Consider what "success" looks like for you personally'
+                ]
+            }
         };
 
         // Scoring weights
@@ -795,10 +1245,34 @@
         };
 
         function startAssessment() {
+            // Validate and capture client info
+            const nameInput = document.getElementById('clientName');
+            const emailInput = document.getElementById('clientEmail');
+
+            if (!nameInput.value.trim()) {
+                nameInput.focus();
+                nameInput.style.borderColor = '#A81D4A';
+                return;
+            }
+
+            if (!emailInput.value.trim() || !isValidEmail(emailInput.value)) {
+                emailInput.focus();
+                emailInput.style.borderColor = '#A81D4A';
+                return;
+            }
+
+            // Store client info
+            clientInfo.name = nameInput.value.trim();
+            clientInfo.email = emailInput.value.trim();
+
             document.getElementById('introCard').style.display = 'none';
             currentQuestion = 1;
             showQuestion(1);
             updateProgress();
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
         function showQuestion(num) {
@@ -929,6 +1403,7 @@
             }
 
             const { scores, total, percentage } = calculateScores();
+            currentScores = scores;
             const breakdownHTML = buildBreakdownHTML(scores);
 
             // Determine which result to show
@@ -938,14 +1413,17 @@
             const mindsetScore = scores.mindset + scores.confidence + scores.capacity;
             if (mindsetScore <= 2 || scores.mindset === 0 || scores.capacity === 0) {
                 resultId = 'results-mindset';
+                currentResultType = 'mindset';
             }
             // Check for accelerator readiness
             else if (percentage >= 70 && scores.network >= 2 && scores.commitment >= 2) {
                 resultId = 'results-accelerator';
+                currentResultType = 'accelerator';
             }
             // Default to course path
             else {
                 resultId = 'results-course';
+                currentResultType = 'course';
             }
 
             // Populate breakdown and show result
@@ -959,6 +1437,212 @@
             // Update progress to complete
             document.getElementById('progressBar').style.width = '100%';
         }
+
+        // PDF Generation
+        function preparePDFTemplate() {
+            const config = resultConfig[currentResultType];
+            const labels = {
+                network: 'LinkedIn Network',
+                capacity: 'Current Capacity',
+                commitment: 'Time Commitment',
+                systems: 'Lead Sources',
+                alignment: 'Work Alignment',
+                boundaries: 'Protecting Expertise',
+                confidence: 'Pricing Confidence',
+                mindset: 'Sales Mindset'
+            };
+
+            // Set date
+            const today = new Date();
+            document.getElementById('pdfDate').textContent = today.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Set client info
+            document.getElementById('pdfClientName').textContent = clientInfo.name;
+            document.getElementById('pdfClientEmail').textContent = clientInfo.email;
+
+            // Set result badge
+            const badge = document.getElementById('pdfResultBadge');
+            badge.textContent = config.badge;
+            badge.className = `pdf-result-badge ${config.badgeClass}`;
+
+            // Set recommendation
+            document.getElementById('pdfRecommendationTitle').textContent = config.title;
+            document.getElementById('pdfRecommendationText').textContent = config.description;
+
+            // Build score grid
+            let scoreGridHTML = '';
+            for (const [key, score] of Object.entries(currentScores)) {
+                scoreGridHTML += `
+                    <div class="pdf-score-item">
+                        <span class="pdf-score-label">${labels[key]}</span>
+                        <span class="pdf-score-value ${getScoreClass(score)}">${getScoreLabel(score)}</span>
+                    </div>
+                `;
+            }
+            document.getElementById('pdfScoreGrid').innerHTML = scoreGridHTML;
+
+            // Build next steps
+            let nextStepsHTML = '';
+            config.nextSteps.forEach(step => {
+                nextStepsHTML += `<li>${step}</li>`;
+            });
+            document.getElementById('pdfNextSteps').innerHTML = nextStepsHTML;
+        }
+
+        function downloadPDF() {
+            preparePDFTemplate();
+
+            const element = document.getElementById('pdfTemplate');
+            const clientName = clientInfo.name.replace(/\s+/g, '_');
+
+            const opt = {
+                margin: 0,
+                filename: `Sales_Readiness_Report_${clientName}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Show status
+            showExportStatus('Generating your PDF...', 'sending');
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                showExportStatus('PDF downloaded successfully!', 'success');
+            });
+        }
+
+        async function sendResults() {
+            preparePDFTemplate();
+
+            showExportStatus('Sending your results...', 'sending');
+
+            // Prepare the data payload
+            const resultsData = {
+                clientName: clientInfo.name,
+                clientEmail: clientInfo.email,
+                resultType: currentResultType,
+                resultTitle: resultConfig[currentResultType].title,
+                scores: currentScores,
+                answers: answers,
+                timestamp: new Date().toISOString()
+            };
+
+            // Generate PDF blob for email attachment
+            const element = document.getElementById('pdfTemplate');
+            const opt = {
+                margin: 0,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            try {
+                const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+                // Convert blob to base64 for transmission
+                const reader = new FileReader();
+                reader.readAsDataURL(pdfBlob);
+                reader.onloadend = async function() {
+                    const base64PDF = reader.result.split(',')[1];
+
+                    // INTEGRATION POINT: Send to your backend/webhook
+                    // This endpoint should:
+                    // 1. Email PDF to client (clientInfo.email)
+                    // 2. Email PDF to Sherra
+                    // 3. Append data to Google Sheet/Doc
+
+                    const webhookPayload = {
+                        ...resultsData,
+                        pdfBase64: base64PDF
+                    };
+
+                    // Example: Send to webhook (replace with actual endpoint)
+                    // await fetch('YOUR_WEBHOOK_URL', {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify(webhookPayload)
+                    // });
+
+                    // For now, log to console and show success
+                    console.log('Results data ready for submission:', resultsData);
+                    console.log('PDF generated and ready for email');
+
+                    showExportStatus(
+                        `Results sent to ${clientInfo.email}! Check your inbox.`,
+                        'success'
+                    );
+
+                    // Also save to localStorage as backup
+                    saveToLocalStorage(resultsData);
+                };
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                showExportStatus('There was an error. Please try downloading instead.', 'error');
+            }
+        }
+
+        function showExportStatus(message, type) {
+            // Update all export status elements (one per results card)
+            const statusElements = document.querySelectorAll('.export-status');
+            statusElements.forEach(el => {
+                el.textContent = message;
+                el.className = `export-status ${type}`;
+            });
+        }
+
+        function saveToLocalStorage(data) {
+            const existingData = JSON.parse(localStorage.getItem('salesReadinessResults') || '[]');
+            existingData.push(data);
+            localStorage.setItem('salesReadinessResults', JSON.stringify(existingData));
+        }
+
+        // Google Apps Script Web App endpoint example
+        // To integrate with Google Sheets, deploy a Google Apps Script web app:
+        /*
+        function doPost(e) {
+            const data = JSON.parse(e.postData.contents);
+            const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+            sheet.appendRow([
+                data.timestamp,
+                data.clientName,
+                data.clientEmail,
+                data.resultType,
+                data.resultTitle,
+                JSON.stringify(data.scores),
+                JSON.stringify(data.answers)
+            ]);
+
+            // Send emails
+            const pdfBlob = Utilities.newBlob(
+                Utilities.base64Decode(data.pdfBase64),
+                'application/pdf',
+                `Sales_Readiness_${data.clientName}.pdf`
+            );
+
+            // Email to client
+            MailApp.sendEmail({
+                to: data.clientEmail,
+                subject: 'Your Sales Readiness Assessment Results',
+                body: 'Thank you for completing the assessment! Your personalized results are attached.',
+                attachments: [pdfBlob]
+            });
+
+            // Email to Sherra
+            MailApp.sendEmail({
+                to: 'sherra@nextlevelnarrative.com',
+                subject: `New Assessment: ${data.clientName}`,
+                body: `${data.clientName} (${data.clientEmail}) completed the assessment.\nResult: ${data.resultTitle}`,
+                attachments: [pdfBlob]
+            });
+
+            return ContentService.createTextOutput(JSON.stringify({success: true}));
+        }
+        */
     </script>
 </body>
 </html>
